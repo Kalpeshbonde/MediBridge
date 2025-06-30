@@ -70,8 +70,3 @@ Developed by [Kalpesh Bonde](https://github.com/Kalpeshbonde) 👨‍💻
 Feel free to connect and collaborate!
 
 ---
-
-## 📜 License
-
-This project is licensed under the [MIT License](https://github.com/Kalpeshbonde/MediBridge/blob/main/LICENSE).  
-Feel free to use, modify, and share! 🎉
