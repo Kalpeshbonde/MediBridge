@@ -21,7 +21,7 @@ const Navbar = () => {
         onClick={() => navigate("/")}
         className="w-44 cursor-pointer"
         src={assets.logo}
-        alt=""
+        alt="logo-img"
       />
       <ul className="hidden md:flex items-start gap-5 font-medium">
         <NavLink to="/">
