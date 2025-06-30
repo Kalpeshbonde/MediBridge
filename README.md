@@ -3,8 +3,6 @@
 # **MediBridge** 🏥🩺  
 _Your Complete Medical Appointment Booking System_
 
-[![Live UI](https://img.shields.io/badge/Live%20User%20UI-Click%20Here-brightgreen?style=for-the-badge)](https://prescripto-frontend-lovat.vercel.app)
-[![Admin Dashboard](https://img.shields.io/badge/Admin%20Dashboard-Click%20Here-blue?style=for-the-badge)](https://prescripto-admin-beta.vercel.app)
 
 </div>
 
@@ -41,17 +39,17 @@ _Your Complete Medical Appointment Booking System_
 ## 🖥️ Screenshots
 
 ### 🔹 User Dashboard
-<img src="https://github.com/user-attachments/assets/f953ae81-7cc8-4b6b-8101-c3aa47d0aada" alt="User Dashboard" />
+<img src="" alt="User Dashboard" />
 
 ---
 
 ### 🔹 Doctor Panel
-<img src="https://github.com/user-attachments/assets/ed488e0a-a61a-4cb1-b95a-f19b9135f9b2" alt="Doctor Dashboard" />
+<img src="" alt="Doctor Dashboard" />
 
 ---
 
 ### 🔹 Admin Panel
-<img src="https://github.com/user-attachments/assets/5479b3c0-0663-41ec-9fe2-17434249155c" alt="Admin Dashboard" />
+<img src="" alt="Admin Dashboard" />
 
 ---
 
