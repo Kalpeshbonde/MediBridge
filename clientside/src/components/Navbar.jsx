@@ -23,22 +23,75 @@ const Navbar = () => {
         src={assets.logo}
         alt="logo-img"
       />
-      <ul className="hidden md:flex items-start gap-5 font-medium">
-        <NavLink to="/">
-          <li className="py-1">HOME</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
+      <ul className="hidden md:flex items-center gap-8 font-medium text-gray-700">
+        <NavLink 
+          to="/" 
+          className={({ isActive }) => 
+            `group relative transition-all duration-300 ${
+              isActive ? 'text-primary' : 'hover:text-primary'
+            }`
+          }
+        >
+          <li className="py-2 px-1 cursor-pointer tracking-wide text-sm font-semibold uppercase">
+            HOME
+          </li>
+          <hr className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 border-none outline-none h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300 ease-out" />
         </NavLink>
-        <NavLink to="/doctors">
-          <li className="py-1">ALL DOCTORS</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
+        
+        <NavLink 
+          to="/doctors" 
+          className={({ isActive }) => 
+            `group relative transition-all duration-300 ${
+              isActive ? 'text-primary' : 'hover:text-primary'
+            }`
+          }
+        >
+          <li className="py-2 px-1 cursor-pointer tracking-wide text-sm font-semibold uppercase">
+            ALL DOCTORS
+          </li>
+          <hr className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 border-none outline-none h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300 ease-out" />
         </NavLink>
-        <NavLink to="/about">
-          <li className="py-1">ABOUT</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
+        
+        <NavLink 
+          to="/about" 
+          className={({ isActive }) => 
+            `group relative transition-all duration-300 ${
+              isActive ? 'text-primary' : 'hover:text-primary'
+            }`
+          }
+        >
+          <li className="py-2 px-1 cursor-pointer tracking-wide text-sm font-semibold uppercase">
+            ABOUT
+          </li>
+          <hr className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 border-none outline-none h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300 ease-out" />
         </NavLink>
-        <NavLink to="/contact">
-          <li className="py-1">CONTACT</li>
-          <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
+        
+        <NavLink 
+          to="/contact" 
+          className={({ isActive }) => 
+            `group relative transition-all duration-300 ${
+              isActive ? 'text-primary' : 'hover:text-primary'
+            }`
+          }
+        >
+          <li className="py-2 px-1 cursor-pointer tracking-wide text-sm font-semibold uppercase">
+            CONTACT
+          </li>
+          <hr className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 border-none outline-none h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300 ease-out" />
+        </NavLink>
+        
+        <NavLink 
+          to="/caremate" 
+          className={({ isActive }) => 
+            `group relative transition-all duration-300 ${
+              isActive ? 'text-primary' : 'hover:text-primary'
+            }`
+          }
+        >
+          <li className="py-2 px-1 cursor-pointer tracking-wide text-sm font-semibold uppercase">
+            CAREMATE
+          </li>
+          <hr className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 border-none outline-none h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300 ease-out" />
         </NavLink>
       </ul>
       <div className="flex items-center gap-4">
@@ -107,6 +160,9 @@ const Navbar = () => {
             </NavLink>
             <NavLink onClick={() => setShowMenu(false)} to="/contact">
               <p className="px-4 py-2 rounded inline-block">CONTACT</p>
+            </NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to="/Caremate">
+              <p className="px-4 py-2 rounded inline-block">CAREMATE</p>
             </NavLink>
           </ul>
         </div>

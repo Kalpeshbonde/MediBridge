@@ -20,13 +20,13 @@ const Contact = () => {
         <div className="flex flex-col justify-center items-start gap-6">
           <p className="font-semibold text-lg text-gray-600">OUR OFFICE</p>
           <p className="text-gray-500">
-            54709 Willms Station <br /> Suite 350, Washington, USA
+            403, Icon Tower, Baner Road <br /> Pune, Maharashtra 411045
           </p>
           <p className="text-gray-500">
-            Tel: (415) 555‑0132 <br /> Email: elyseniyibizi502@gmail.com
+            Tel: +91 90210 12345 <br /> Email: kalpeshbonde04@gmail.com
           </p>
           <p className="font-semibold text-lg text-gray-600">
-            CAREERS AT PRESCRIPTO
+            CAREERS AT MEDIBRIDGE
           </p>
           <p className="text-gray-500">
             Learn more about our teams and job openings.
