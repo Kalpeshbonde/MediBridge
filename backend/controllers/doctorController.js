@@ -163,6 +163,9 @@ const registerDoctor = async (req, res) => {
     if (!userRecord) {
       return res.json({ success: false, message: "User not found." });
     }
+    if (userRecord.doctorId) {
+      return res.json({ success: false, message: "Doctor profile already linked." });
+    }
     let imageUrl = "";
     if (imageFile) {
       const uploaded = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
@@ -185,7 +188,10 @@ const registerDoctor = async (req, res) => {
     };
     const newDoctor = new doctorModel(doctorData);
     const savedDoctor = await newDoctor.save();
-    await userModel.findByIdAndUpdate(userId, { doctorId: savedDoctor._id.toString() });
+    await userModel.findByIdAndUpdate(userId, {
+      doctorId: savedDoctor._id.toString(),
+      role: "doctor",
+    });
     res.json({ success: true, message: "Doctor profile created.", doctorId: savedDoctor._id });
   } catch (error) {
     console.log(error);
@@ -199,7 +205,7 @@ const doctorProfileByUser = async (req, res) => {
   try {
     const { userId } = req.body;
     const userRecord = await userModel.findById(userId);
-    if (!userRecord || !userRecord.doctorId) {
+    if (!userRecord || userRecord.role !== "doctor" || !userRecord.doctorId) {
       return res.json({ success: false, message: "Doctor profile not found." });
     }
     const profileData = await doctorModel.findById(userRecord.doctorId).select("-password");
@@ -214,7 +220,7 @@ const appointmentsByUser = async (req, res) => {
   try {
     const { userId } = req.body;
     const userRecord = await userModel.findById(userId);
-    if (!userRecord || !userRecord.doctorId) {
+    if (!userRecord || userRecord.role !== "doctor" || !userRecord.doctorId) {
       return res.json({ success: true, appointments: [] });
     }
     const appointments = await appointmentModel.find({ docId: userRecord.doctorId });
@@ -230,7 +236,7 @@ const updateDoctorProfileByUser = async (req, res) => {
     const { userId, fees, address, available, about, experience } = req.body;
     const imageFile = req.file;
     const userRecord = await userModel.findById(userId);
-    if (!userRecord || !userRecord.doctorId) {
+    if (!userRecord || userRecord.role !== "doctor" || !userRecord.doctorId) {
       return res.json({ success: false, message: "Doctor profile not found." });
     }
     const updateData = {

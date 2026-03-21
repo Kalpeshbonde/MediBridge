@@ -9,7 +9,7 @@ const Footer = () => {
         <div>
           <img className="mb-5 w-40" src={assets.logo} alt="" />
           <p className="w-full md:w-2/3 text-gray-600 leading-6">
-            MediBridge is a full-stack, role-based appointment booking system tailored for hospitals, clinics, and individual practitioners. With three levels of secure authentication—Patient, Doctor, and Admin—it streamlines appointment management, enhances communication, and simplifies healthcare operations, all in one unified platform.
+            MediBridge is a full-stack, role-based appointment booking system tailored for hospitals, clinics, and individual practitioners. With secure authentication for patients and doctors, it streamlines appointment management, enhances communication, and simplifies healthcare operations, all in one unified platform.
           </p>
         </div>
 

@@ -2,7 +2,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // These are placeholder doctors shown when the backend hasn't loaded data yet
 // or when no image is provided.
-// Hospital/admin can replace these via the admin panel once the backend is live.
+// Doctors can replace these after onboarding once the backend is live.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DEFAULT_DOCTORS = [
