@@ -1,7 +1,7 @@
 <div align="center">
 
 # **MediBridge** 🏥🩺  
-_Your Complete Medical Appointment Booking System_
+_Patient-first appointment booking with doctor self-management_
 
 </div>
 
@@ -9,24 +9,21 @@ _Your Complete Medical Appointment Booking System_
 
 ## 🔍 Overview
 
-**MediBridge** is a full-stack, role-based appointment booking system designed for hospitals, clinics, and independent practitioners. It features secure authentication and access control for **patients** and **doctors**, enabling seamless self-service workflows.
+**MediBridge** is a full-stack appointment booking system built for clinics and independent practitioners. Patients can find doctors and book appointments, while doctors manage their profiles and schedules directly from their dashboard.
 
 ### 👤 Patient Features
-- Secure patient registration and login  
-- Book, view, and cancel appointments with doctors  
-- View appointment history and manage profile
+- Secure registration and login  
+- Book, view, and cancel appointments  
+- Appointment history and profile management
 
 ### 🩺 Doctor Features
-- Login and access personal doctor dashboard  
-- View upcoming appointments and earnings  
-- Manage and update profile information  
+- Doctor onboarding from a patient account  
+- Doctor dashboard with upcoming appointments  
+- Update profile, availability, and fees
 
-## 🤖 New! CareMate Chatbot Integration
+## 🤖 CareMate Chatbot
 
-MediBridge now includes **CareMate**, an AI-powered chatbot integrated into the homepage to:
-- Assist users with appointment booking guidance  
-- Answer common patient and doctor queries  
-- Improve overall user experience with instant support
+**CareMate** provides instant guidance for booking and general health FAQs. It is powered by Google Gemini and runs from the backend API.
 
 ---
 
@@ -55,8 +52,61 @@ MediBridge now includes **CareMate**, an AI-powered chatbot integrated into the 
 - **Database**: MongoDB  
 - **Authentication**: JWT  
 - **Cloud Services**: Cloudinary (for profile uploads)  
-- **Chatbot**: CareMate (AI-powered chatbot integration)  
+- **Chatbot**: CareMate (Google Gemini)  
 - **Hosting**: Vercel
+
+---
+
+## ⚙️ Environment Variables
+
+Create these env files:
+
+- `backend/.env`
+- `clientside/.env`
+
+**Backend (.env)**
+```
+PORT=4000
+MONGODB_URI=your_mongodb_uri
+MONGODB_DB_NAME=prescripto
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-1.5-flash
+GEMINI_API_VERSION=v1
+```
+
+**Client (.env)**
+```
+VITE_BACKEND_URL=http://localhost:4000
+```
+
+---
+
+## ▶️ Run Locally
+
+**Backend**
+```
+cd backend
+npm install
+npm start
+```
+
+**Client**
+```
+cd clientside
+npm install
+npm run dev
+```
+
+---
+
+## 🔐 Security Notes
+
+- Do not commit real API keys to git.
+- Rotate keys if they were exposed.
 
 ---
 
