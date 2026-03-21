@@ -9,7 +9,7 @@ import appointmentModel from "../models/appointmentModel.js";
 // API to register user
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.json({ success: false, message: "Missing Details" });
@@ -33,12 +33,13 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role: role || "patient",
     };
 
     const newUser = new userModel(userData);
     const user = await newUser.save();
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     res.json({ success: true, token });
   } catch (error) {

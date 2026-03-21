@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Send, Bot, User, Loader2, Heart, MessageSquare, X, Minimize2 } from 'lucide-react';
+import { AppContext } from '../context/AppContext';
 
 const CareMateBot = () => {
+  const { backendUrl } = useContext(AppContext);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -26,11 +28,12 @@ const CareMateBot = () => {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+    const messageText = inputText.trim();
+    if (!messageText) return;
 
     const userMessage = {
       id: Date.now(),
-      text: inputText,
+      text: messageText,
       sender: 'user',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
@@ -41,14 +44,22 @@ const CareMateBot = () => {
     setIsTyping(true);
 
     try {
-      // Replace this with your actual API call
-      const response = await fetch('/api/caremate/chat', {
+      if (!backendUrl) {
+        throw new Error('Backend URL is not configured');
+      }
+
+      const response = await fetch(`${backendUrl}/api/caremate/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: inputText }),
+        body: JSON.stringify({ message: messageText }),
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || `Request failed with status ${response.status}`);
+      }
 
       const data = await response.json();
       

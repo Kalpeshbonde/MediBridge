@@ -6,12 +6,11 @@ import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/adminRoute.js";
 import doctorRouter from "./routes/doctorRoute.js";
 import userRouter from "./routes/userRoute.js";
+import caremateRouter from "./routes/caremateRoute.js"; // ✅ NEW LINE
 
 // app config
 const app = express();
 const port = process.env.PORT || 4000;
-connectDB();
-connectCloudinary();
 
 // middlewares
 app.use(express.json());
@@ -21,9 +20,22 @@ app.use(cors());
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
+app.use("/api/caremate", caremateRouter); // ✅ NEW LINE
 
 app.get("/", (req, res) => {
   res.send("API WORKING");
 });
 
-app.listen(port, () => console.log("Server started", port));
+const startServer = async () => {
+  try {
+    await connectDB();
+    await connectCloudinary();
+
+    app.listen(port, () => console.log("Server started", port));
+  } catch (error) {
+    console.error("Backend startup failed:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
