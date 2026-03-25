@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 // ─── Navbar ────────────────────────────────────────────────────────────────────
-const Navbar = () => {
+const Navbar = ({ onOpenCareMate }) => {
   const navigate = useNavigate();
   const { token, setToken, userData } = useContext(AppContext);
 
@@ -17,46 +17,60 @@ const Navbar = () => {
 
   const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/doctors", label: "All Doctors" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
-    { to: "/caremate", label: "CareMate" },
+    { to: "/doctors", label: "Find Doctors" },
+    { label: "Care Assistant", onClick: () => onOpenCareMate?.() },
   ];
+
+  const isLoggedIn = !!token && !!userData;
 
   return (
     <>
-      <nav className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-200 px-0">
-        {/* Logo */}
-        <img
-          onClick={() => navigate("/")}
-          className="w-52 cursor-pointer"
-          src={assets.logo}
-          alt="MediBridge"
-        />
+      <div className="sticky top-0 z-50 bg-gradient-to-b from-sky-50/95 via-white/95 to-white/95 backdrop-blur-md border-b border-sky-100 shadow-[0_8px_24px_rgba(13,110,253,0.08)]">
+        <nav className="flex items-center justify-between flex-nowrap text-sm pt-3 pb-3 px-2 sm:px-4 lg:px-6">
+        {/* Left: Logo */}
+        <div className="flex items-center min-w-[220px]">
+          <img
+            onClick={() => navigate("/")}
+            className="w-52 cursor-pointer ml-1"
+            src={assets.logo}
+            alt="MediBridge"
+          />
+        </div>
 
-        {/* Desktop Nav Links */}
-        <ul className="hidden md:flex items-center gap-1 font-medium text-gray-600">
-          {navLinks.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `group relative px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-widest transition-all duration-200 ${
-                  isActive
-                    ? "text-primary bg-primary/5"
-                    : "text-gray-500 hover:text-primary hover:bg-primary/5"
-                }`
-              }
-            >
-              {label}
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full w-0 group-hover:w-4/5 transition-all duration-300 ease-out" />
-            </NavLink>
+        {/* Center: Desktop Nav Links */}
+        <ul className="hidden md:flex flex-1 items-center justify-center gap-1 font-medium text-gray-600">
+          {navLinks.map(({ to, label, onClick }) => (
+            to ? (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `group relative px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                    isActive
+                      ? "text-primary bg-primary/10"
+                      : "text-gray-700 hover:text-primary hover:bg-primary/5"
+                  }`
+                }
+              >
+                {label}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full w-0 group-hover:w-4/5 transition-all duration-300 ease-out" />
+              </NavLink>
+            ) : (
+              <button
+                key={label}
+                onClick={onClick}
+                className="group relative px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-700 hover:text-primary hover:bg-primary/5"
+              >
+                {label}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full w-0 group-hover:w-4/5 transition-all duration-300 ease-out" />
+              </button>
+            )
           ))}
         </ul>
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-3">
-          {token && userData ? (
+        {/* Right: Auth / User */}
+        <div className="flex items-center justify-end gap-3 min-w-[240px]">
+          {isLoggedIn ? (
             /* User Dropdown */
             <div className="relative group cursor-pointer">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 hover:border-primary/40 hover:bg-primary/5 transition-all duration-200">
@@ -114,13 +128,13 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-2">
               <button
                 onClick={() => navigate("/login")}
-                className="text-xs font-semibold text-gray-600 px-4 py-2.5 rounded-full border border-gray-200 hover:border-primary hover:text-primary transition-all duration-200"
+                className="text-sm font-semibold text-gray-800 px-5 py-2.5 rounded-full bg-white border border-sky-300 hover:border-primary hover:text-primary transition-all duration-200"
               >
                 Login
               </button>
               <button
                 onClick={() => navigate("/signup")}
-                className="text-xs font-semibold text-white bg-primary px-5 py-2.5 rounded-full hover:bg-primary/90 active:scale-95 transition-all duration-200 shadow-sm shadow-primary/20"
+                className="text-sm font-semibold text-white bg-primary px-6 py-2.5 rounded-full hover:bg-primary/90 active:scale-95 transition-all duration-200 shadow-sm shadow-primary/20"
               >
                 Create Account
               </button>
@@ -130,12 +144,13 @@ const Navbar = () => {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setShowMenu(true)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-sky-100 transition-colors"
           >
             <img className="w-5" src={assets.menu_icon} alt="menu" />
           </button>
         </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* ─── Mobile Menu ─────────────────────────────────────────── */}
       <div
@@ -153,7 +168,7 @@ const Navbar = () => {
 
         {/* Slide-in Panel */}
         <div
-          className={`absolute right-0 top-0 bottom-0 w-72 bg-white shadow-2xl transition-transform duration-300 ${
+          className={`absolute right-0 top-0 bottom-0 w-72 bg-white shadow-2xl transition-transform duration-300 flex flex-col ${
             showMenu ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -168,26 +183,36 @@ const Navbar = () => {
           </div>
 
           <ul className="flex flex-col px-4 pt-4 gap-1">
-            {navLinks.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={() => setShowMenu(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-colors ${
-                    isActive
-                      ? "text-primary bg-primary/8"
-                      : "text-gray-600 hover:text-primary hover:bg-primary/5"
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
+            {navLinks.map(({ to, label, onClick }) => (
+              to ? (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setShowMenu(false)}
+                  className={({ isActive }) =>
+                    `block px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-colors ${
+                      isActive
+                        ? "text-primary bg-primary/8"
+                        : "text-gray-600 hover:text-primary hover:bg-primary/5"
+                    }`
+                  }
+                >
+                  {label}
+                </NavLink>
+              ) : (
+                <button
+                  key={label}
+                  onClick={() => { setShowMenu(false); onClick?.(); }}
+                  className="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold tracking-wide text-gray-700 hover:text-primary hover:bg-primary/5 transition-colors"
+                >
+                  {label}
+                </button>
+              )
             ))}
           </ul>
 
-          {!token && (
-            <div className="absolute bottom-8 left-0 right-0 px-6 flex flex-col gap-2">
+          {!isLoggedIn && (
+            <div className="mt-auto px-6 py-6 flex flex-col gap-2 border-t border-gray-100 bg-white">
               <button
                 onClick={() => { setShowMenu(false); navigate("/login"); }}
                 className="w-full py-3 rounded-full border border-primary text-primary font-semibold text-sm hover:bg-primary/5 transition-colors"
@@ -199,6 +224,29 @@ const Navbar = () => {
                 className="w-full py-3 rounded-full bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors"
               >
                 Create Account
+              </button>
+            </div>
+          )}
+
+          {isLoggedIn && (
+            <div className="mt-auto px-6 py-6 flex flex-col gap-2 border-t border-gray-100 bg-white">
+              <button
+                onClick={() => { setShowMenu(false); navigate("/my-profile"); }}
+                className="w-full py-3 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition-colors"
+              >
+                My Profile
+              </button>
+              <button
+                onClick={() => { setShowMenu(false); navigate("/my-appointments"); }}
+                className="w-full py-3 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition-colors"
+              >
+                My Appointments
+              </button>
+              <button
+                onClick={() => { setShowMenu(false); logout(); }}
+                className="w-full py-3 rounded-full bg-red-50 text-red-500 font-semibold text-sm hover:bg-red-100 transition-colors"
+              >
+                Logout
               </button>
             </div>
           )}

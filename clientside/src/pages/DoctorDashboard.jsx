@@ -44,6 +44,8 @@ const DoctorDashboard = () => {
   const [fees, setFees]                   = useState("");
   const [about, setAbout]                 = useState("");
   const [available, setAvailable]         = useState(true);
+  const [city, setCity]                   = useState("");
+  const [hospitalId, setHospitalId]       = useState("");
   const [addressLine1, setAddressLine1]   = useState("");
   const [addressLine2, setAddressLine2]   = useState("");
   const [appointments, setAppointments]   = useState([]);
@@ -61,6 +63,7 @@ const DoctorDashboard = () => {
         fetchDoctorProfile();
         fetchAppointments();
       } else {
+        if (userData.city) setCity(userData.city);
         setLoading(false);
       }
     }
@@ -81,6 +84,8 @@ const DoctorDashboard = () => {
         setFees(p.fees || "");
         setAbout(p.about || "");
         setAvailable(p.available ?? true);
+        setCity(p.city || "");
+        setHospitalId(p.hospitalId || "");
         setAddressLine1(p.address?.line1 || "");
         setAddressLine2(p.address?.line2 || "");
       } else {
@@ -112,7 +117,7 @@ const DoctorDashboard = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    if (!speciality || !degree || !experience || !fees) {
+    if (!speciality || !degree || !experience || !fees || !city) {
       toast.error("Please fill all required fields.");
       return;
     }
@@ -123,6 +128,8 @@ const DoctorDashboard = () => {
       formData.append("about", about);
       formData.append("experience", experience);
       formData.append("available", available);
+      formData.append("city", city);
+      if (hospitalId) formData.append("hospitalId", hospitalId);
       formData.append("address", JSON.stringify({ line1: addressLine1, line2: addressLine2 }));
       if (imageFile) formData.append("image", imageFile);
 
@@ -296,6 +303,12 @@ const DoctorDashboard = () => {
               </Field>
               <Field label="Consultation Fees (₹)" required>
                 <input type="number" value={fees} onChange={(e) => setFees(e.target.value)} placeholder="e.g. 500" min="0" required className={inputCls} />
+              </Field>
+              <Field label="City" required>
+                <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Pune" required className={inputCls} />
+              </Field>
+              <Field label="Hospital ID (optional)">
+                <input type="text" value={hospitalId} onChange={(e) => setHospitalId(e.target.value)} placeholder="Paste hospital ID" className={inputCls} />
               </Field>
             </div>
             <Field label="About / Bio">

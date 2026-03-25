@@ -1,17 +1,21 @@
 import express from "express";
+import multer from "multer";
 import {
   registerUser,
   loginUser,
   getProfile,
   updateProfile,
   bookAppointment,
-  listAppointment,
+  listAppointments,
   cancelAppointment,
 } from "../controllers/userController.js";
 import authUser from "../middlewares/authUser.js";
-import upload from "../middlewares/multer.js";
+import requireRole from "../middlewares/requireRole.js";
 
 const userRouter = express.Router();
+
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
 
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
@@ -23,8 +27,8 @@ userRouter.post(
   authUser,
   updateProfile
 );
-userRouter.post("/book-appointment", authUser, bookAppointment);
-userRouter.get("/appointments", authUser, listAppointment);
-userRouter.post("/cancel-appointment", authUser, cancelAppointment);
+userRouter.post("/book-appointment", authUser, requireRole(["patient"]), bookAppointment);
+userRouter.get("/appointments", authUser, requireRole(["patient"]), listAppointments);
+userRouter.post("/cancel-appointment", authUser, requireRole(["patient"]), cancelAppointment);
 
 export default userRouter;

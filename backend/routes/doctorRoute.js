@@ -13,9 +13,12 @@ import {
   doctorProfileByUser,
   appointmentsByUser,
   updateDoctorProfileByUser,
+  getDoctorById,    
 } from "../controllers/doctorController.js";
+import { addReview, listReviews } from "../controllers/reviewController.js";
 import authDoctor from "../middlewares/authDoctor.js";
 import authUser from "../middlewares/authUser.js";
+import requireRole from "../middlewares/requireRole.js";
 import upload from "../middlewares/multer.js";
 
 const doctorRouter = express.Router();
@@ -30,10 +33,27 @@ doctorRouter.get("/dashboard", authDoctor, doctorDashboard);
 doctorRouter.get("/profile", authDoctor, doctorProfile);
 doctorRouter.post("/update-profile", authDoctor, upload.single("image"), updateDoctorProfile);
 
-doctorRouter.post("/register", upload.single("image"), authUser, registerDoctor);
+doctorRouter.post(
+  "/register",
+  upload.single("image"),
+  authUser,
+  requireRole(["patient"]),
+  registerDoctor
+);
 doctorRouter.post("/upload-image", upload.single("image"), authUser, uploadDoctorImage);
-doctorRouter.get("/profile-by-user", authUser, doctorProfileByUser);
-doctorRouter.get("/appointments-by-user", authUser, appointmentsByUser);
-doctorRouter.post("/update-profile-by-user", upload.single("image"), authUser, updateDoctorProfileByUser);
+doctorRouter.get("/profile-by-user", authUser, requireRole(["doctor"]), doctorProfileByUser);
+doctorRouter.get("/appointments-by-user", authUser, requireRole(["doctor"]), appointmentsByUser);
+doctorRouter.post(
+  "/update-profile-by-user",
+  upload.single("image"),
+  authUser,
+  requireRole(["doctor"]),
+  updateDoctorProfileByUser
+);
+
+doctorRouter.get("/:docId/reviews", listReviews);
+doctorRouter.post("/:docId/review", authUser, requireRole(["patient"]), addReview);
+
+doctorRouter.get("/:docId", getDoctorById);
 
 export default doctorRouter;

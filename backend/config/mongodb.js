@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import { env } from "../utils/env.js";
 
 const connectDB = async () => {
-  const mongoUri = process.env.MONGODB_URI;
-  const dbName = process.env.MONGODB_DB_NAME || "prescripto";
+  const mongoUri = env.MONGODB_URI;
+  const dbName = env.MONGODB_DB_NAME;
 
   if (!mongoUri) {
     throw new Error("Missing MONGODB_URI in backend/.env");

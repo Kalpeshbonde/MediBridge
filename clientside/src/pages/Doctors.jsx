@@ -28,6 +28,7 @@ const DoctorCard = ({ item, index, onClick }) => {
             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
             src={item.image}
             alt={item.name}
+            loading="lazy"
             onError={(e) => {
               e.target.style.display = "none";
               e.target.parentElement.innerHTML = `
@@ -56,6 +57,11 @@ const DoctorCard = ({ item, index, onClick }) => {
         </div>
         <p className="text-gray-900 font-semibold text-sm leading-tight">{item.name}</p>
         <p className="text-gray-500 text-xs mt-0.5">{item.speciality}</p>
+        {(item.city || item.hospital?.name) && (
+          <p className="text-gray-400 text-[11px] mt-1">
+            {[item.city, item.hospital?.name].filter(Boolean).join(" - ")}
+          </p>
+        )}
         {(item.experience || item.fees) && (
           <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-gray-100">
             {item.experience && <span className="text-xs text-gray-400">{item.experience}</span>}
@@ -72,18 +78,21 @@ const Doctors = () => {
   const [filterDoc, setFilterDoc] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const navigate = useNavigate();
-  const { doctors } = useContext(AppContext);
+  const { doctors, selectedCity } = useContext(AppContext);
 
   // Use real backend data if available, otherwise fall back to defaults
   const sourceData = doctors.length > 0 ? doctors : DEFAULT_DOCTORS;
+  const cityFiltered = selectedCity
+    ? sourceData.filter((doc) => doc.city === selectedCity)
+    : sourceData;
 
   useEffect(() => {
     if (speciality) {
-      setFilterDoc(sourceData.filter((doc) => doc.speciality === speciality));
+      setFilterDoc(cityFiltered.filter((doc) => doc.speciality === speciality));
     } else {
-      setFilterDoc(sourceData);
+      setFilterDoc(cityFiltered);
     }
-  }, [doctors, speciality]);
+  }, [doctors, speciality, selectedCity]);
 
   return (
     <div className="pb-10">

@@ -3,19 +3,21 @@ import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const RelatedDoctors = ({ speciality, docId }) => {
-  const { doctors } = useContext(AppContext);
+  const { doctors, selectedCity } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [relDoc, setRelDocs] = useState([]);
 
   useEffect(() => {
     if (doctors.length > 0 && speciality) {
-      const doctorsData = doctors.filter(
-        (doc) => doc.speciality === speciality && doc._id !== docId
-      );
+      const doctorsData = doctors.filter((doc) => {
+        if (doc.speciality !== speciality || doc._id === docId) return false;
+        if (selectedCity && doc.city !== selectedCity) return false;
+        return true;
+      });
       setRelDocs(doctorsData);
     }
-  }, [doctors, speciality, docId]);
+  }, [doctors, speciality, docId, selectedCity]);
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
@@ -33,7 +35,7 @@ const RelatedDoctors = ({ speciality, docId }) => {
             className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
             key={index}
           >
-            <img className="bg-blue-50" src={item.image} alt="" />
+            <img className="bg-blue-50" src={item.image} alt="" loading="lazy" />
             <div className="p-4">
               <div
                 className={`flex items-center gap-2 text-sm text-center ${
@@ -49,6 +51,11 @@ const RelatedDoctors = ({ speciality, docId }) => {
               </div>
               <p className="text-gray-900 text-lg font-medium">{item.name}</p>
               <p className="text-gray-600 text-sm ">{item.speciality}</p>
+              {(item.city || item.hospital?.name) && (
+                <p className="text-gray-400 text-xs mt-1">
+                  {[item.city, item.hospital?.name].filter(Boolean).join(" - ")}
+                </p>
+              )}
             </div>
           </div>
         ))}

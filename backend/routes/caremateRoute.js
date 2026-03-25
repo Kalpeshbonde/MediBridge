@@ -25,11 +25,11 @@ router.post("/chat", async (req, res) => {
   const { message } = req.body;
 
   if (!message) {
-    return res.status(400).json({ error: "Message is required" });
+    return res.error("Message is required", 400);
   }
 
   if (!geminiApiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
+    return res.error("GEMINI_API_KEY is not configured", 500);
   }
 
   try {
@@ -44,14 +44,11 @@ router.post("/chat", async (req, res) => {
     );
 
     const response = result.response.text();
-    res.json({ response });
+    res.json({ success: true, response });
 
   } catch (error) {
     console.error("Gemini error:", error?.message || error);
-    res.status(500).json({
-      error: "Failed to connect to Gemini",
-      details: error?.message || "Unknown error",
-    });
+    res.error("Failed to connect to Gemini", 502);
   }
 });
 

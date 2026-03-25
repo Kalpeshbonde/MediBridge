@@ -1,20 +1,20 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Send, Bot, User, Loader2, Heart, MessageSquare, X, Minimize2 } from 'lucide-react';
-import { AppContext } from '../context/AppContext';
+import { useState, useRef, useEffect, useContext } from "react";
+import { Send, Bot, User, Loader2, Heart, MessageSquare, Minimize2 } from "lucide-react";
+import { AppContext } from "../context/AppContext";
 
-const CareMateBot = () => {
-  const { backendUrl } = useContext(AppContext);
+const CareMateBot = ({ initialMinimized = false }) => {
+  const { api, backendError } = useContext(AppContext);
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hi! I'm CareMate, your personal healthcare assistant. How can I help you today?",
-      sender: 'bot',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      text: "Welcome to CareMate. I can help you find doctors by city and specialty, compare availability, and guide your appointment booking.",
+      sender: "bot",
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     }
   ]);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(initialMinimized);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -34,8 +34,8 @@ const CareMateBot = () => {
     const userMessage = {
       id: Date.now(),
       text: messageText,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      sender: "user",
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -44,32 +44,19 @@ const CareMateBot = () => {
     setIsTyping(true);
 
     try {
-      if (!backendUrl) {
-        throw new Error('Backend URL is not configured');
+      if (!api) {
+        throw new Error(backendError || "Backend URL is not configured");
       }
 
-      const response = await fetch(`${backendUrl}/api/caremate/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: messageText }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || `Request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
+      const { data } = await api.post("/api/caremate/chat", { message: messageText });
       
       // Simulate typing delay
       setTimeout(() => {
         const botMessage = {
           id: Date.now() + 1,
           text: data.response || "I'm here to help! Could you please provide more details about your health concern?",
-          sender: 'bot',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
         };
         
         setMessages(prev => [...prev, botMessage]);
@@ -78,12 +65,16 @@ const CareMateBot = () => {
       }, 1000);
 
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
+      const fallback =
+        error?.response?.data?.message ||
+        error?.message ||
+        "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
-        sender: 'bot',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        text: fallback,
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
       };
       
       setMessages(prev => [...prev, errorMessage]);
@@ -100,9 +91,9 @@ const CareMateBot = () => {
   };
 
   const quickActions = [
-    "Book appointment",
-    "Find doctor",
-    "Check symptoms"
+    "Find doctors in my city",
+    "Book an appointment",
+    "Compare fees and timings"
   ];
 
   const handleQuickAction = (action) => {
@@ -115,25 +106,25 @@ const CareMateBot = () => {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={() => setIsMinimized(false)}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
         >
-          <MessageSquare className="w-5 h-5" />
+          <MessageSquare className="w-6 h-6" />
         </button>
       </div>
     );
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-80 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
+    <div className="fixed bottom-4 right-4 z-50 w-[22rem] h-[27rem] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <Heart className="w-4 h-4 text-white" />
+          <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
+            <Heart className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm">CareMate</h3>
-            <p className="text-xs text-blue-100">Health Assistant</p>
+            <h3 className="font-semibold text-base">CareMate</h3>
+            <p className="text-sm text-blue-100">Health Assistant</p>
           </div>
         </div>
         <button
@@ -163,7 +154,7 @@ const CareMateBot = () => {
                   <Bot className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                 )}
                 <div className="flex-1">
-                  <p className="text-xs leading-relaxed">{message.text}</p>
+                  <p className="text-sm leading-relaxed">{message.text}</p>
                   <p className={`text-xs mt-1 ${
                     message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
                   }`}>
@@ -198,14 +189,14 @@ const CareMateBot = () => {
 
       {/* Quick Actions */}
       {messages.length <= 1 && (
-        <div className="p-3 bg-white border-t border-gray-100">
-          <p className="text-xs text-gray-600 mb-2">Quick actions:</p>
-          <div className="flex flex-wrap gap-1">
+        <div className="p-2 bg-white border-t border-gray-100">
+          <p className="text-xs text-gray-700 mb-1 font-medium">Quick actions:</p>
+          <div className="flex flex-wrap gap-1.5">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={() => handleQuickAction(action)}
-                className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors"
+                className="px-2.5 py-1 text-xs bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
               >
                 {action}
               </button>
@@ -224,9 +215,9 @@ const CareMateBot = () => {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your health question..."
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               rows="1"
-              style={{ minHeight: '36px', maxHeight: '80px' }}
+              style={{ minHeight: '40px', maxHeight: '88px' }}
             />
           </div>
           <button

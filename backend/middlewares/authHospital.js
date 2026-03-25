@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
 
-// user authentication middleware
-const authUser = async (req, res, next) => {
+const authHospital = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || "";
     const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-    const token = bearer || req.headers.token; // fallback for legacy clients
+    const token = bearer || req.headers.token; // fallback
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
@@ -13,7 +12,7 @@ const authUser = async (req, res, next) => {
       return res.status(500).json({ success: false, message: "JWT secret not configured" });
     }
     const token_decode = jwt.verify(token, process.env.JWT_SECRET);
-    req.body.userId = token_decode.id;
+    req.body.hospitalId = token_decode.id;
     next();
   } catch (error) {
     console.log(error);
@@ -22,4 +21,4 @@ const authUser = async (req, res, next) => {
   }
 };
 
-export default authUser;
+export default authHospital;

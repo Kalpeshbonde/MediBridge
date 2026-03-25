@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { DEFAULT_DOCTORS, getInitials, getAvatarColor } from "../data/defaultDoctors";
@@ -19,6 +19,7 @@ const DoctorCard = ({ item, index, onClick }) => {
             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
             src={item.image}
             alt={item.name}
+            loading="lazy"
             onError={(e) => {
               e.target.style.display = "none";
               e.target.parentElement.innerHTML = `
@@ -47,6 +48,11 @@ const DoctorCard = ({ item, index, onClick }) => {
         </div>
         <p className="text-gray-900 font-semibold text-sm leading-tight">{item.name}</p>
         <p className="text-gray-500 text-xs mt-0.5">{item.speciality}</p>
+        {(item.city || item.hospital?.name) && (
+          <p className="text-gray-400 text-[11px] mt-1">
+            {[item.city, item.hospital?.name].filter(Boolean).join(" - ")}
+          </p>
+        )}
         {(item.experience || item.fees) && (
           <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-gray-100">
             {item.experience && <span className="text-xs text-gray-400">{item.experience}</span>}
@@ -60,16 +66,19 @@ const DoctorCard = ({ item, index, onClick }) => {
 
 const TopDoctors = () => {
   const navigate = useNavigate();
-  const { doctors } = useContext(AppContext);
+  const { doctors, selectedCity } = useContext(AppContext);
 
   // Use real backend data if available, otherwise fall back to defaults
   const displayDoctors = doctors.length > 0 ? doctors : DEFAULT_DOCTORS;
+  const cityFiltered = selectedCity
+    ? displayDoctors.filter((doc) => doc.city === selectedCity)
+    : displayDoctors;
 
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
-      <h1 className="text-3xl font-medium">Top Doctors to Book</h1>
-      <p className="sm:w-1/3 text-center text-sm text-gray-500">
-        Simply browse through our extensive list of trusted doctors.
+      <h1 className="text-3xl font-medium">Best Doctors {selectedCity ? `In ${selectedCity}` : "Near You"}</h1>
+      <p className="sm:w-1/2 text-center text-sm text-gray-500">
+        Discover top doctors with verified profiles, hospital details, and real-time availability.
       </p>
 
       {doctors.length === 0 && (
@@ -79,7 +88,7 @@ const TopDoctors = () => {
       )}
 
       <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-5 gap-y-6 px-3 sm:px-0">
-        {displayDoctors.slice(0, 10).map((item, index) => (
+        {cityFiltered.slice(0, 10).map((item, index) => (
           <DoctorCard
             key={item._id}
             item={item}
@@ -96,7 +105,7 @@ const TopDoctors = () => {
         onClick={() => { navigate("/doctors"); scrollTo(0, 0); }}
         className="bg-blue-50 text-gray-600 px-12 py-3 rounded-full mt-10 hover:bg-blue-100 transition-colors font-medium text-sm"
       >
-        More Doctors
+        View All Doctors
       </button>
     </div>
   );

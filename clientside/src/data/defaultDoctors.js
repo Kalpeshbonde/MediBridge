@@ -14,6 +14,7 @@ export const DEFAULT_DOCTORS = [
     experience: "8 Years",
     fees: 500,
     about: "A trusted general physician with 8 years of experience in primary care.",
+    city: "Pune",
     image: null,
   },
   {
@@ -24,6 +25,7 @@ export const DEFAULT_DOCTORS = [
     experience: "5 Years",
     fees: 700,
     about: "Specialist in women's health and reproductive medicine.",
+    city: "Mumbai",
     image: null,
   },
   {
@@ -34,6 +36,7 @@ export const DEFAULT_DOCTORS = [
     experience: "6 Years",
     fees: 600,
     about: "Expert in skin conditions, cosmetic dermatology and skin care.",
+    city: "Bangalore",
     image: null,
   },
   {
@@ -44,6 +47,7 @@ export const DEFAULT_DOCTORS = [
     experience: "10 Years",
     fees: 800,
     about: "Dedicated pediatrician caring for children from newborns to teens.",
+    city: "Pune",
     image: null,
   },
   {
@@ -54,6 +58,7 @@ export const DEFAULT_DOCTORS = [
     experience: "12 Years",
     fees: 1000,
     about: "Specialist in neurological disorders, headaches and brain health.",
+    city: "Delhi",
     image: null,
   },
   {
@@ -64,6 +69,7 @@ export const DEFAULT_DOCTORS = [
     experience: "7 Years",
     fees: 750,
     about: "Expert in digestive health, gut conditions and endoscopy.",
+    city: "Hyderabad",
     image: null,
   },
   {
@@ -74,6 +80,7 @@ export const DEFAULT_DOCTORS = [
     experience: "9 Years",
     fees: 450,
     about: "Experienced general physician focused on preventive care.",
+    city: "Mumbai",
     image: null,
   },
   {
@@ -84,6 +91,7 @@ export const DEFAULT_DOCTORS = [
     experience: "4 Years",
     fees: 650,
     about: "Compassionate gynecologist specializing in maternal health.",
+    city: "Pune",
     image: null,
   },
   {
@@ -94,6 +102,7 @@ export const DEFAULT_DOCTORS = [
     experience: "6 Years",
     fees: 600,
     about: "Focused on treating acne, eczema and advanced skin treatments.",
+    city: "Bangalore",
     image: null,
   },
   {
@@ -104,6 +113,7 @@ export const DEFAULT_DOCTORS = [
     experience: "11 Years",
     fees: 900,
     about: "Senior pediatrician with expertise in child development.",
+    city: "Delhi",
     image: null,
   },
   {
@@ -114,6 +124,7 @@ export const DEFAULT_DOCTORS = [
     experience: "8 Years",
     fees: 950,
     about: "Neurologist specializing in epilepsy and movement disorders.",
+    city: "Hyderabad",
     image: null,
   },
   {
@@ -124,6 +135,7 @@ export const DEFAULT_DOCTORS = [
     experience: "15 Years",
     fees: 1200,
     about: "Senior gastroenterologist with expertise in liver and colon health.",
+    city: "Pune",
     image: null,
   },
 ];
