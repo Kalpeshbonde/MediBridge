@@ -37,7 +37,7 @@ MediBridge is a full-stack platform where patients find doctors, book appointmen
 - Backend: PORT, MONGODB_URI, MONGODB_DB_NAME, JWT_SECRET, CLOUDINARY_* keys, GEMINI_* keys, ALLOWED_ORIGINS (comma-separated).
 - Frontend: VITE_BACKEND_URL (API base URL).
 
-## Contact
+## Contact for Details
 
 To get the project, drop a mail: kalpeshbonde04@gmail.com
 
